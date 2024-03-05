@@ -1,28 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
-// 간단한 회원가입 폼
-// 1. 이름
-// 2. 생년월일
-// 3. 국적
-// 4. 자기소개
-
-// 비슷한 여러개의 state가 있다면 하나의 객체값으로 묶어서 하나의 state로 관리하면 편함
-// 비슷한 이벤트 핸들러들은 통합 이벤트 핸들러로 묶어줄 수 있다.
 const Register = () => {
+  //  ref는 컴포넌트 내부에서 랜더링에 영향을 미치지 않아야되는 변수를 생성할 때 활용할 수 있다.
+  const countRef = useRef(0);
+  const inputRef = useRef();
   const [input, setInput] = useState({
     name: '',
     birth: '',
     country: '',
     bio: '',
   });
+
   const onChange = (e) => {
+    countRef.current++;
+    console.log(countRef.current);
     setInput({ ...input, [e.target.name]: e.target.value });
+  };
+
+  const onClick = () => {
+    if (input.name === '') {
+      inputRef.current.focus();
+    }
   };
 
   return (
     <>
       <div>
         <input
+          ref={inputRef}
           name="name"
           value={input.name}
           onChange={onChange}
@@ -50,6 +55,7 @@ const Register = () => {
       <div>
         <textarea name="bio" value={input.bio} onChange={onChange} />
       </div>
+      <button onClick={onClick}>제출</button>
     </>
   );
 };
