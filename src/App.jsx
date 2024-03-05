@@ -1,31 +1,54 @@
 import './App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import React from 'react';
 
-function App() {
-  // 배열의 구조분해할당
-  const [count, setCount] = useState(0);
-  const [light, setLight] = useState('OFF');
-  // 리액트는 state값이 변화하였을 때 렌더링 되기 떄문에 가변적인 값을 관리할 떄 일반 변수가 아닌 state를 이용해서 처리한다.
-
-  const UpCount = () => {
-    setCount(count + 1);
-  };
+// 자신의 state가 변하지 않아도 부모로부터 받은 pops가 변경되면 리렌더링 된다.
+// 랜더링을 최소화 하기 위해 각각의 state들은 각각의 컴포넌트 내부에 배치하는 것이 좋다.
+const Bulb = () => {
+  const [light, setLight] = useState('ON');
 
   const chageLight = () => {
     setLight(light === 'OFF' ? 'ON' : 'OFF');
   };
 
   return (
+    <div>
+      {light === 'ON' ? (
+        <h1 style={{ backgroundColor: 'orange' }}>ON</h1>
+      ) : (
+        <h1 style={{ backgroundColor: 'gray' }}>OFF</h1>
+      )}
+      <button onClick={chageLight}>{light === 'ON' ? '켜기' : '끄기'}</button>
+    </div>
+  );
+};
+
+const Counter = () => {
+  const [count, setCount] = useState(0);
+
+  const UpCount = () => {
+    setCount(count + 1);
+  };
+
+  return (
+    <div>
+      <h1>{count}</h1>
+      <button onClick={UpCount}>+</button>
+    </div>
+  );
+};
+
+/** 리렌더링 조건!
+  1. state가 변경되었을 떄
+  2. props가 변경되었을 때
+  3. 부모가 리렌더링이 발생할 떄
+ */
+
+function App() {
+  return (
     <>
-      <div>
-        <h1>{light}</h1>
-      </div>
-      <button onClick={chageLight}>{light === 'OFF' ? '켜기' : '끄기'}</button>
-      <div>
-        <h1>{count}</h1>
-        <button onClick={UpCount}>+</button>
-      </div>
+      <Bulb />
+      <Counter />
     </>
   );
 }
